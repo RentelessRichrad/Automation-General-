@@ -1,0 +1,26 @@
+# 无登录站点的最简用例示例
+suite: noauth
+profile: noauth
+defaults:
+  tags: [smoke]
+
+cases:
+
+  - id: NOAUTH-001
+    name: 首页-标题与正文渲染正常
+    page: home
+    assertions:
+      - page_healthy: {}
+      - title_contains: {value: "Example"}
+      - visible: {element: heading}
+      - text_contains: {value: "Example Domain"}
+      - no_console_error: {}
+
+  - id: NOAUTH-002
+    name: 首页-可通过链接跳转
+    page: home
+    steps:
+      - click: {element: more_link}
+      - wait: {seconds: 2}
+    assertions:
+      - url_contains: {value: "iana.org"}

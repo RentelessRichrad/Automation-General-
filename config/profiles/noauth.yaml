@@ -1,0 +1,26 @@
+# 无需登录的站点示例（最简单的一份 profile）
+name: noauth
+
+base_url: https://example.com
+
+browser:
+  headless: true
+  window_size: 1280,800
+  extra_args: []
+
+timeouts:
+  page_load: 30
+  element: 10
+  script: 20
+
+# 整页 body 作为内容容器（没有 SPA 容器时的通用写法）
+content_container: body
+
+healthy:
+  console_ignore:
+    - "favicon"
+  http_error_threshold: 400
+
+# 不需要登录
+login:
+  mode: none

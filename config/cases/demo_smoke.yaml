@@ -1,0 +1,58 @@
+# 用例（cases）：只描述"打开哪页 → 做什么 → 断言什么"
+# ${username} / ${password} 自动来自 profile 的 credentials 或 --var 传入
+suite: demo
+profile: demo                 # 指定用哪个站点档案（也可命令行 --profile 覆盖）
+defaults:
+  tags: [smoke]
+
+cases:
+
+  - id: DEMO-001
+    name: 表单登录-正确账号可进入安全页
+    tags: [smoke, login]
+    page: login                # 起始页面（引用 pages 里的页面名）
+    steps:
+      - input: {element: username, value: "${username}"}
+      - input: {element: password, value: "${password}"}
+      - click: {element: login_btn}
+      - wait: {element: flash}
+    assertions:
+      - page_healthy: {}
+      - url_contains: {value: "/secure"}
+      - visible: {element: flash}
+      - text_contains: {value: "You logged into a secure area"}
+
+  - id: DEMO-002
+    name: 表单登录-错误密码应提示失败
+    tags: [smoke, negative]
+    page: login
+    steps:
+      - input: {element: username, value: "${username}"}
+      - input: {element: password, value: "wrong-password"}
+      - click: {element: login_btn}
+      - wait: {element: flash}
+    assertions:
+      - visible: {element: flash}
+      - text_contains: {value: "Your password is invalid"}
+      - url_contains: {value: "/login"}
+
+  - id: DEMO-003
+    name: 表格页-表头列齐全
+    tags: [smoke, regression]
+    steps:
+      - goto: {page: tables}
+    assertions:
+      - page_healthy: {}
+      - visible: {element: table1}
+      - table_columns: {element: table1, contains: [Last Name, First Name, Email]}
+      - table_rows: {element: table1, min: 1}
+
+  - id: DEMO-004
+    name: 复选框页-可勾选第一个
+    tags: [regression]
+    steps:
+      - goto: {page: checkboxes}
+      - click: {element: box1}
+    assertions:
+      - visible: {element: box1}
+      - count: {css: "input[type=checkbox]", min: 2}

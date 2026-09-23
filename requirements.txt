@@ -1,0 +1,6 @@
+selenium>=4.20,<5
+PyYAML>=6.0
+# 可选：pytest 接入层
+pytest>=8.0
+pytest-xdist>=3.5
+pytest-rerunfailures>=14

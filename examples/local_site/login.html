@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Login Page</title></head>
+<body>
+<div id="content">
+  <h2>Login Page</h2>
+  <!-- 预留高度，保证空状态下元素也是"可见"的 -->
+  <div id="flash" style="min-height:18px;color:#b00"></div>
+  <form id="login" onsubmit="return doLogin()">
+    <div><label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="用户名"></div>
+    <div><label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="密码"></div>
+    <button type="submit" class="radius">Login</button>
+  </form>
+</div>
+<script>
+function doLogin() {
+  var u = document.getElementById('username').value;
+  var p = document.getElementById('password').value;
+  var f = document.getElementById('flash');
+  if (u === 'tomsmith' && p === 'SuperSecretPassword!') {
+    document.cookie = 'logged_in=1; path=/';
+    window.location.href = 'secure.html';
+  } else {
+    f.className = 'error';
+    f.textContent = (u === 'tomsmith') ? 'Your password is invalid!' : 'Your username is invalid!';
+  }
+  return false;
+}
+</script>
+</body>
+</html>

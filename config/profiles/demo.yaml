@@ -1,0 +1,49 @@
+# 站点档案（profile）= 一个被测网站的全部"环境参数"
+# 换系统时，通常只需要复制一份本文件，改 base_url / login / content_container 三处
+name: demo
+
+# —— 地址（可参数化）——
+base_url: https://the-internet.herokuapp.com
+
+# —— 浏览器（可参数化）——
+browser:
+  headless: true
+  window_size: 1920,1080
+  user_agent: ""            # 留空=默认；可填自定义 UA
+  extra_args: []            # 额外 Chrome 启动参数，如 ["--disable-gpu"]
+
+# —— 超时（可参数化）——
+timeouts:
+  page_load: 30
+  element: 10
+  script: 20
+
+# —— 页面"有内容"判定用的内容容器（关键通用化参数）——
+# 页面健康检查用它在不在、有没有可见文本，来判断是不是白屏/未渲染
+content_container: "#content"
+
+# —— 健康检查阈值（可参数化）——
+healthy:
+  # 控制台里这些关键词属于框架/浏览器噪音，忽略掉
+  console_ignore:
+    - "favicon"
+    - "Download the React DevTools"
+  # 接口响应 >= 该状态码视为接口错误（None 表示不检查）
+  http_error_threshold: 400
+
+# —— 登录（可参数化，五种模式）——
+# mode: none | form | oauth | cookie | steps
+login:
+  mode: form
+  url: /login                          # 登录页地址（相对 base_url）
+  username_field: {id: username}       # 用户名输入框定位
+  password_field: {id: password}       # 密码输入框定位
+  submit: {css: "button[type=submit]"} # 登录按钮定位
+  success:                             # 登录成功的判定条件（满足任一即可）
+    url_contains: /secure
+  cookie_file: state/cookies.json      # 登录成功后落盘，下次复用
+  credentials:
+    username_env: DEMO_USERNAME        # 从环境变量 / .env 读取
+    password_env: DEMO_PASSWORD
+    username_default: tomsmith         # 环境变量缺失时的兜底
+    password_default: SuperSecretPassword!

@@ -1,0 +1,23 @@
+# 本地示例站点的页面与元素（页面名用 l_ 前缀，避免和 demo 站点重名）
+pages:
+
+  l_login:
+    path: /login.html
+    wait_for: {id: username}
+    elements:
+      username:  {id: username}
+      password:  {id: password}
+      login_btn: {css: "button[type=submit]"}
+      flash:     {id: flash}
+
+  l_secure:
+    path: /secure.html
+    wait_for: {text: Logout}
+    elements:
+      logout:  {text: Logout}
+      flash:   {id: flash}
+
+  l_tables:
+    path: /tables.html
+    elements:
+      table1: {id: table1}

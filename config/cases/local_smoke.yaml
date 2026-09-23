@@ -1,0 +1,46 @@
+# 本地示例站点的用例：覆盖 表单登录成功 / 登录失败提示 / 表格断言
+suite: local
+profile: local
+defaults:
+  tags: [smoke]
+
+cases:
+
+  - id: LOCAL-001
+    name: 本地站点-正确账号可进入安全页
+    tags: [smoke, login]
+    page: l_login
+    steps:
+      - input: {element: username, value: "${username}"}
+      - input: {element: password, value: "${password}"}
+      - click: {element: login_btn}
+      - wait: {element: flash}
+    assertions:
+      - page_healthy: {}
+      - url_contains: {value: "secure.html"}
+      - visible: {element: flash}
+      - text_contains: {value: "You logged into a secure area"}
+
+  - id: LOCAL-002
+    name: 本地站点-错误密码应提示失败
+    tags: [smoke, negative]
+    page: l_login
+    steps:
+      - input: {element: username, value: "${username}"}
+      - input: {element: password, value: "bad-password"}
+      - click: {element: login_btn}
+      - wait: {element: flash}
+    assertions:
+      - visible: {element: flash}
+      - text_contains: {value: "Your password is invalid"}
+      - url_contains: {value: "login.html"}
+
+  - id: LOCAL-003
+    name: 本地站点-表格表头与行数
+    tags: [smoke, regression]
+    steps:
+      - goto: {page: l_tables}
+    assertions:
+      - visible: {element: table1}
+      - table_columns: {element: table1, contains: [Last Name, First Name, Email]}
+      - table_rows: {element: table1, min: 2}

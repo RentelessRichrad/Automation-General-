@@ -1,0 +1,16 @@
+# 私密信息：账号密码
+.env
+
+# 运行时产物
+state/
+reports/
+screenshots/
+.cache/
+logs/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/

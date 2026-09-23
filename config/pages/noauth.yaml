@@ -1,0 +1,9 @@
+pages:
+
+  home:
+    path: /
+    wait_for: {tag: h1}
+    elements:
+      heading: {tag: h1}
+      paragraph: {css: p}
+      more_link: {text: "Learn more"}

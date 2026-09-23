@@ -1,0 +1,34 @@
+# 页面与元素清单（pages）= 把"页面布局 + 元素按钮"全部参数化
+# 用例里只写元素名（如 username），不写死任何 css/xpath —— 前端改样式时只改这里
+pages:
+
+  login:
+    path: /login
+    wait_for: {id: username}        # 进入页面后等这个元素出现再继续
+    elements:
+      username:  {id: username}
+      password:  {id: password}
+      login_btn: {css: "button[type=submit]"}
+      flash:     {id: flash}
+      heading:   {tag: h2}
+
+  secure:
+    path: /secure
+    wait_for: {text: Logout}
+    elements:
+      # 多种定位策略可混用，挑最稳的那种
+      logout:  {text: Logout}
+      flash:   {id: flash}
+      heading: {tag: h2}
+
+  tables:
+    path: /tables
+    elements:
+      table1: {id: table1}
+      table2: {id: table2}
+
+  checkboxes:
+    path: /checkboxes
+    elements:
+      box1: {css: "input[type=checkbox]", index: 1}
+      box2: {css: "input[type=checkbox]", index: 2}

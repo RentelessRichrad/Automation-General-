@@ -1,0 +1,39 @@
+# 本地自带示例站点（不依赖外网，用来验证"表单登录"这类完整链路）
+# file://./ 会按项目根目录解析，所以直接跑就行，不需要起 Web 服务。
+# 若想走真 HTTP，把 base_url 改成 http://127.0.0.1:8899 并起服务：
+#   python -m http.server 8899 --directory examples/local_site
+name: local
+
+base_url: file://./examples/local_site
+
+browser:
+  headless: true
+  window_size: "1280,800"
+  extra_args: []
+
+timeouts:
+  page_load: 30
+  element: 10
+  script: 20
+
+content_container: "#content"
+
+healthy:
+  console_ignore:
+    - "favicon"
+  http_error_threshold: 400
+
+login:
+  mode: form
+  url: /login.html
+  username_field: {id: username}
+  password_field: {id: password}
+  submit: {css: "button[type=submit]"}
+  success:
+    url_contains: secure.html
+  cookie_file: state/cookies_local.json
+  credentials:
+    username_env: LOCAL_USERNAME
+    password_env: LOCAL_PASSWORD
+    username_default: tomsmith
+    password_default: SuperSecretPassword!
