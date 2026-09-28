@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>下拉示例 - local site</title>
+  <style>
+    body { font-family: -apple-system, "Microsoft YaHei", sans-serif; margin: 0; background: #f6f8fa; }
+    #content { max-width: 720px; margin: 40px auto; background: #fff; padding: 24px 28px; border-radius: 8px; }
+    h2 { margin-top: 0; }
+    select, button { font-size: 14px; padding: 6px 10px; }
+    .row { margin: 12px 0; }
+    label { display: inline-block; width: 80px; color: #57606a; }
+  </style>
+</head>
+<body>
+  <div id="content">
+    <h2>下拉示例</h2>
+    <p>用来演示 <code>select_any</code>：用例只关心"选了一个有效值"，不关心具体选了哪个。
+       注意下拉第一项是占位项「请选择」——真正的选项应该跳过它。</p>
+
+    <div class="row">
+      <label for="dropdown">状态</label>
+      <select id="dropdown" name="status">
+        <option value="">请选择</option>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="multi">类型</label>
+      <select id="multi" name="type">
+        <option value="">请选择</option>
+        <option value="a">启用</option>
+        <option value="b">禁用</option>
+      </select>
+    </div>
+  </div>
+</body>
+</html>

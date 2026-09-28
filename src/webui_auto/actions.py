@@ -28,6 +28,17 @@ _DROPDOWN_OPTION_CSS = (
 # 「任意选中一个」时的取值偏好：查询类用例要的是"查得出数据"，
 # 所以优先选大概率有数据的选项，而不是下拉第一项（第一项常是空结果那一档）。
 _PREFERRED_OPTIONS = ("启用", "正常", "否", "有效", "全部")
+# 这些是占位项，不是真选项——选了等于没选（原生 select 的第一项常常就是它）
+_PLACEHOLDER_OPTION_TEXTS = ("请选择", "please select", "select an option", "select...")
+
+
+def _is_placeholder_option(text) -> bool:
+    t = str(text or "").strip().lower()
+    if not t:
+        return True
+    if any(bad in t for bad in _PLACEHOLDER_OPTION_TEXTS):
+        return True
+    return t.strip("-— ") == ""
 
 
 class Actions:
@@ -246,7 +257,7 @@ class Actions:
         return []
 
     def _visible_options(self):
-        """按常见 UI 库的选择器收集当前可见的下拉选项。"""
+        """按常见 UI 库的选择器收集当前可见、且不是占位项的下拉选项。"""
         out = []
         for css in _DROPDOWN_OPTION_CSS:
             try:
@@ -256,6 +267,8 @@ class Actions:
                             continue
                     except Exception:
                         continue
+                    if _is_placeholder_option(e.text):
+                        continue
                     if e not in out:
                         out.append(e)
             except Exception:
@@ -263,7 +276,7 @@ class Actions:
         return out
 
     def _pick_option(self, timeout: float = 5.0, prefer: bool = True):
-        """从可见选项里挑一个：偏好值优先，否则第一项。"""
+        """从可见选项里挑一个：偏好值优先，否则第一项（占位项已排除）。"""
         opts = self._visible_options()
         end = time.time() + max(0.5, timeout)
         while time.time() < end and not opts:
@@ -468,7 +481,7 @@ class Actions:
         try:
             if (el.tag_name or "").lower() == "select":
                 sel = Select(el)
-                opts = [o for o in sel.options if (o.text or "").strip()]
+                opts = [o for o in sel.options if not _is_placeholder_option(o.text)]
                 if not opts:
                     return {"action": "select_any", "status": "fail",
                             "detail": f"{desc} 没有可选项"}

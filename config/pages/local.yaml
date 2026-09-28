@@ -21,3 +21,14 @@ pages:
     path: /tables.html
     elements:
       table1: {id: table1}
+
+  l_dropdown:
+    path: /dropdown.html
+    wait_for: {id: dropdown}
+    elements:
+      # select_any 演示：不指定具体值，框架自己挑一个有效选项
+      dropdown: {id: dropdown}
+      # 偏好值优先：下面这个下拉里有「启用」，应被优先选中
+      type:     {id: multi}
+      # 当前被选中的那一项，用来断言"确实选中了、且不是占位项"
+      chosen:   {css: "#dropdown option:checked"}

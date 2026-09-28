@@ -32,3 +32,11 @@ pages:
     elements:
       box1: {css: "input[type=checkbox]", index: 1}
       box2: {css: "input[type=checkbox]", index: 2}
+
+  dropdown:
+    path: /dropdown
+    wait_for: {id: dropdown}
+    elements:
+      # 原生 select：select_any 会跳过第一项「Please select an option」再选
+      dropdown: {id: dropdown}
+      chosen:   {css: "#dropdown option:checked"}

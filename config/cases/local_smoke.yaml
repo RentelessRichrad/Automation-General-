@@ -44,3 +44,27 @@ cases:
       - visible: {element: table1}
       - table_columns: {element: table1, contains: [Last Name, First Name, Email]}
       - table_rows: {element: table1, min: 2}
+
+  - id: LOCAL-004
+    name: 本地站点-任意选中一个下拉选项（select_any 跳过占位项）
+    tags: [smoke, regression, dropdown]
+    steps:
+      - goto: {page: l_dropdown}
+      - select_any: {element: dropdown}
+    assertions:
+      - page_healthy: {}
+      - visible: {element: dropdown}
+      # 占位项「请选择」的 value 是空串；选中有效项后应变成 1
+      - attribute_equals: {element: chosen, attr: value, value: "1"}
+
+  - id: LOCAL-005
+    name: 本地站点-select_any 优先挑「启用」这类有数据的选项
+    tags: [smoke, regression, dropdown]
+    steps:
+      - goto: {page: l_dropdown}
+      - select_any: {element: type}
+    assertions:
+      - attribute_equals:
+          css: "#multi option:checked"
+          attr: value
+          value: "a"

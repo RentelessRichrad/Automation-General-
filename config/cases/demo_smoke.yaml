@@ -56,3 +56,15 @@ cases:
     assertions:
       - visible: {element: box1}
       - count: {css: "input[type=checkbox]", min: 2}
+
+  - id: DEMO-005
+    name: 下拉页-任意选中一个有效选项（select_any）
+    tags: [smoke, regression, dropdown]
+    steps:
+      - goto: {page: dropdown}
+      - select_any: {element: dropdown}   # 不指定值：跳过「Please select an option」选第一个有效项
+    assertions:
+      - page_healthy: {}
+      - visible: {element: dropdown}
+      # 选中后 value 从空串变成 "1"（Option 1）
+      - attribute_equals: {element: chosen, attr: value, value: "1"}
