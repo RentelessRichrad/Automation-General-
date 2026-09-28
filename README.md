@@ -167,6 +167,7 @@ cases:
 | 输入 | `input: {element: username, value: "${username}"}` | 先清空再输入 |
 | 清空 | `clear: {element: x}` | |
 | 下拉选择 | `select: {element: x, option: 启用}` | 原生 select 与自定义下拉都支持 |
+| 任意选中一项 | `select_any: {element: status}` | 不关心具体值，选一个有效选项（优先 启用/正常/否） |
 | 勾选/取消 | `check: {element: x}` / `uncheck: {...}` | |
 | 按键 | `press: {key: ENTER}` | |
 | 滚动 | `scroll: {to: bottom}` 或 `scroll: {element: x}` | |

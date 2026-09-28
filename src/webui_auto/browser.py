@@ -18,6 +18,28 @@ def _bypass_local_proxy() -> None:
     os.environ["no_proxy"] = val
 
 
+# 必须在页面任何脚本运行之前注入：window 捕获阶段、全页第一个注册的点击计数器。
+# Selenium 原生 click 走 CDP 输入管线，实测会**静默丢失**——WebDriver 不报错，
+# 页面上却一个 click 事件都没收到（连"最先注册"的监听都收不到，说明事件根本没投递）。
+# 有了这个计数器，动作层才能可靠判断"这次点击到底有没有送达"，没送达就走 DOM 兜底。
+_INPUT_SENTINEL = """
+if (!window.__wbInputSentinel) {
+  window.__wbInputSentinel = true;
+  window.__wbClicks = 0;
+  window.addEventListener('click', function () { window.__wbClicks++; }, true);
+}
+"""
+
+
+def _install_input_sentinel(driver) -> None:
+    try:
+        driver.execute_cdp_cmd(
+            "Page.addScriptToEvaluateOnNewDocument", {"source": _INPUT_SENTINEL})
+    except Exception:
+        # 拿不到 CDP 时动作层退化为"总是 DOM 兜底"，行为仍正确，只是少了验证
+        pass
+
+
 def create_driver(profile: Dict[str, Any], headless_override=None):
     """按 profile.browser 启动浏览器。"""
     b = profile.get("browser") or {}
@@ -53,6 +75,7 @@ def create_driver(profile: Dict[str, Any], headless_override=None):
     _bypass_local_proxy()
 
     driver = webdriver.Chrome(options=opts)
+    _install_input_sentinel(driver)
     try:
         driver.set_page_load_timeout(int(t.get("page_load", 30)))
     except Exception:
